@@ -1,0 +1,190 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\lang9\f0\fs22 Use Cases\par
+\par
+\ul Create Account\ulnone\par
+Actors: Guest User\par
+Description: A Guest User wishes to become a Dedicated User by creating an account.\par
+Preconditions: None\par
+Post-Conditions: A personal account will be created for the user.\par
+Normal Flow\par
+1. The user will input the information for the account - first and last name, username, and password.\par
+2. The system will confirm that their username does not match any other user's.\par
+3. The system will return a message confirming that the account creation was successful.\par
+4. The user will continue to access other features of the site.\par
+Alternate Flow\par
+1A1: The user is logged in\par
+1. The system will display an error message, and prompt the user to log out before accessing this feature.\par
+2. The use case ends.\par
+2A1: The system will find that the account cannot be placed into the database because of a username conflict.\par
+1. The system will return an error message and the account will not be created.\par
+2. The use case ends.\par
+\par
+\ul Log In\ulnone\par
+Actors: Guest User\par
+Description: A Guest User wishes to validate their presence and access higher functions of the site.\par
+Preconditions: The Guest User had created an account, but has not logged into it.\par
+Post-Conditions: The user will be given a session tied to their account.\par
+Normal Flow\par
+1. The user will input the username and password tied to their account.\par
+2. The system will confirm that the username and password match an entry in the system's account table.\par
+3. The system will generate a session and populate session variables with the user's account information. This session will follow the user until they leave.\par
+4. The system will display the user's name, and that the login was successful.\par
+5. The user will continue to access other features of the site.\par
+Alternate Flow\par
+1A1: The user is already logged in\par
+1. The system will display an error message, and prompt the user to log out before accessing this feature.\par
+2. The use case ends.\par
+2A1: The account information specified does not correspond to any account in the system.\par
+1. The system will display an error message notifying the user that the username and password do not match.\par
+2. The use case ends.\par
+\par
+\ul View Available Classes\ulnone\par
+Actors: Guest User -or- Dedicated User\par
+Description: A user wishes to see what courses are available.\par
+Preconditions: None\par
+Post-Conditions: None\par
+Normal Flow\par
+1. The user will access a part of the site that will display the desired information.\par
+2. The system will pull class information from the ScubaCourse table to display class metadata\par
+3. The system will pull information from the TakesCourse table to display class availability.\par
+4. The system will display this data neatly in an HTML table viewable by the user.\par
+5. The user will continue to access other features of the site.\par
+\par
+\ul Modify Account Metadata\ulnone\par
+Actors: Dedicated User\par
+Description: A user wishes to modify their personal data\par
+Preconditions: The user is logged in\par
+Post-Conditions: Information tied to their account has changed.\par
+Normal Flow\par
+1. The user will select the piece of data they wish to change\par
+2. The user will input new values for this data\par
+3. The system will update that user's data in the ScubaUser table to reflect these changes\par
+4. The system will print a message notifying the user that the change was successful.\par
+5. The user will continue to access other features of the site.\par
+Alternate Flow\par
+1A1. The user is not logged in\par
+1. The system will display an error message prompting the user to log in.\par
+2. The user continues into Use Case 2 (Log In) before accessing this feature again.\par
+\par
+\ul Add Money\ulnone\par
+Actors: Dedicated User\par
+Description: A user wishes to add money to their account\par
+Preconditions: The user is logged in\par
+Post-Conditions: The amount of money on the user's account is higher than before.\par
+Normal Flow\par
+1. The user will input the amount of money they wish to add.\par
+2. The system will update the money value in the ScubaUser entry to reflect this change\par
+3. The system will print that the operation was successful.\par
+4. The user will continue to access other features of the site.\par
+Alternate Flow\par
+1A1. The user is not logged in\par
+1. The system will display an error message prompting the user to log in.\par
+2. The user continues into Use Case 2 (Log In) before accessing this feature again.\par
+2A1. The amount of money is nonpositive\par
+1. The system will display an error message.\par
+2. The use case ends.\par
+\par
+\ul Register For a Course\ulnone\par
+Actors: Dedicated User\par
+Description: A user wishes to register for a course\par
+Preconditions: The user is logged in and has the class ID for the course they wish to register for.\par
+Post-Conditions: The user is registered for the course.\par
+Normal Flow\par
+1. The user will input the class ID of the course they wish to enter.\par
+2. The system will ensure that room is available in the course.\par
+3. The system will deduct money from the user's account equal to the price of the course.\par
+4. The system will place the user in the course via an entry into the TakesCourse table.\par
+5. The system will display a message that the registration was successful.\par
+6. The user will continue to access other features of the site.\par
+Alternate Flow\par
+1A1. The user is not logged in\par
+1. The system will display an error message prompting the user to log in.\par
+2. The user continues into Use Case 2 (Log In) before accessing this feature again.\par
+1A2. The classID put in by the user does not correspond to an existing course\par
+1. The system will display an error message\par
+2. The use case ends.\par
+2A1. The course is full\par
+1. The system will display an error message\par
+2. The use case ends.\par
+3A1. The user does not have sufficient funds\par
+1. The system will display an error message\par
+2. The use case ends\par
+\par
+\ul Log Out\ulnone\par
+Actors: Dedicated User\par
+Description: A user wishes to terminate their session\par
+Precondition: The user is logged in\par
+Post-Condition: The user is not logged in\par
+Normal Flow\par
+1. The user will request session termination\par
+2. The system will terminate their session\par
+3. The system will display a message saying that the termination was successful.\par
+4. The user will continue to access other features of the site.\par
+\par
+\ul View Personal Data\ulnone\par
+Actors: Administrator\par
+Description: The site administrator wishes to view a list of registered users on their site.\par
+Precondition: The administrator has the admin key\par
+Post-Condition: None\par
+Normal Flow\par
+1. The administrator inputs the admin key, known only to them\par
+2. The system pulls a list of all users from the database\par
+3. The system displays this information to the administrator.\par
+Alternate Flow\par
+1A1: The admin key is incorrect.\par
+1. The system outputs an error message\par
+2. The use case ends.\par
+\par
+\ul Add a Course\ulnone\par
+Actors: Administrator\par
+Description: The site administrator wants to add a new course\par
+Precondition: The administrator has the admin key\par
+Post-Condition: A new course is available.\par
+Normal Flow\par
+1. The administrator inputs the admin key, known only to them\par
+2. The administrator inputs the metadata of the course - name, description, location, time, date, price, capacity. (Note: The classID is generated via in autoincrementer)\par
+3. The system adds this data to the ScubaCourse table.\par
+4. The course is now accessible to users to view or register for.\par
+Alternate Flow\par
+1A1: The admin key is incorrect.\par
+1. The system outputs an error message\par
+2. The use case ends.\par
+\par
+\ul Modify a Course\ulnone\par
+Actors: Administrator\par
+Description: The site administrator wants to modify a course\par
+Precondition: The administrator has the admin key\par
+Post-Condition: A course's data is modified\par
+Normal Flow\par
+1. The administrator inputs the admin key, known only to them\par
+2. The administrator inputs the class ID of the class they wish to change.\par
+3. The administrator inputs the new metadata of the course - name, description, location, time, date, price, capacity.\par
+4. The system updates the entry in ScubaCourse to reflect this change.\par
+5. These changes are immediately viewable to users.\par
+Alternate Flow\par
+1A1: The admin key is incorrect.\par
+1. The system outputs an error message\par
+2. The use case ends.\par
+2A1: The classID does not correspond to an existing class.\par
+1. The system outputs an error message\par
+2. The use case ends.\par
+\par
+\ul Remove a Course\ulnone\par
+Actors: Administrator\par
+Description: The site administrator wants to delete a course\par
+Precondition: The administrator has the admin key\par
+Post-Condition: A course no longer exists.\par
+Normal Flow\par
+1. The administrator inputs the admin key, known only to them\par
+2. The administrator inputs the class ID of the class they wish to delete.\par
+3. The system removes this entry in the ScubaCourse table.\par
+4. These changes are immediately viewable to users.\par
+Alternate Flow\par
+1A1: The admin key is incorrect.\par
+1. The system outputs an error message\par
+2. The use case ends.\par
+2A1: The classID does not correspond to an existing class.\par
+1. The system outputs an error message\par
+2. The use case ends.\par
+}
+ 

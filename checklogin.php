@@ -7,6 +7,11 @@ mysql_select_db("nmdb");
 $tusername = $_POST['username'];
 $tpassword = $_POST['password'];
 
+$flag2 == false;
+
+if ($tusername == "" || $tpassword == "") { $flag2 = true; }
+
+if (!$flag2) {
 $result = mysql_query("SELECT * FROM ScubaUser WHERE username=\"" . $tusername . "\" AND password=\"" . $tpassword . "\"");
 
 $row = mysql_fetch_array($result);
@@ -17,10 +22,11 @@ if($flag == 1)
 {
 session_start();
 }
+}
 ?>
 
 <html>
-<?php if ($flag == 1) { ?>
+<?php if ($flag == 1 && $flag2 == 0) { ?>
 <title>Log In Successful</title>
 <?php } else { ?>
 <title>Log In Failed</title>
@@ -31,7 +37,7 @@ session_start();
 <table width="100%" height="100%" border=1px>
 <tr> <td style="background-color:#80a0ff;" height=20px>
 
-<?php if($flag == 1) { ?>
+<?php if($flag == 1 || isset($_POST['username'])) { ?>
 <p style="text-align:center;"><a href="userpanel.php?<?php echo SID ?>">Manage Account</a> - <a href="list.php?<?php echo SID ?>">View Available Classes</a> - <a href="schedule.php?<?php echo SID ?>">Sign Up for a Class</a> - <a href="about.php?<?php echo SID ?>">About Us</a></p>
 <?php } else { ?>
 <p style="text-align:center;"><a href="login.php">Login Page</a> - <a href="list.php">View Available Classes</a> - <a href="about.php">About Us</a></p>
@@ -42,8 +48,9 @@ session_start();
 <tr valign="top">
 <td style="background-color:#aaffaa;width:400px;text-align:top;">
 
-<?php
-if ($flag == 1)
+<?php if ($flag2) { ?>
+<p>This page requires input. Either you accessed this page directly, or left one or more input fields blank. To access this page correctly, please return to the <a href="login.php?<?php echo SID ?>">Login Page</a>.
+<?php } else if ($flag == 1)
 {
 $_SESSION['username'] = $row["username"];
 $_SESSION['password'] = $row["password"];

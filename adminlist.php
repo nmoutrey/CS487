@@ -19,9 +19,9 @@ $key = $_POST['key'];
 <tr valign="top">
 <td style="background-color:#aaffaa;width:400px;text-align:top;">
 
-<?php
-
-if (strcmp($key,"bistriceanu") == 0 || strcmp($key,"Bistriceanu") == 0) {
+<?php if ($key == "") { ?>
+<p>This page requires input. You either attempted to access this page directly, or left the input field blank.</p>
+<?php } else if (strcmp($key,"bistriceanu") == 0 || strcmp($key,"Bistriceanu") == 0) {
 
 ?>
 

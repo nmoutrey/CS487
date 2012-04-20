@@ -6,6 +6,15 @@ mysql_select_db("nmdb");
 
 $id = $_POST['id'];
 
+$flag3 = false;
+$flag4 = false;
+
+if (!ctype_digit($id)) { $flag3 = true; }
+
+if ($id == "") {$flag4 = true; }
+
+if (!$flag3 && !$flag4) {
+
 $result = mysql_query("SELECT * FROM ScubaCourse WHERE classID = " . $id);
 
 $row = mysql_fetch_array($result);
@@ -25,8 +34,9 @@ $result = mysql_query("SELECT COUNT(*) AS num FROM TakesCourse NATURAL JOIN Scub
 $row = mysql_fetch_array($result);
 $ctaking = $row['num'];
 
-$key = $_POST['key'];
+}
 
+$key = $_POST['key'];
 ?>
 
 <html>
@@ -40,7 +50,11 @@ $key = $_POST['key'];
 
 <?php
 
-if (strcmp($key,"bistriceanu") == 0 || strcmp($key,"Bistriceanu") == 0) {
+if ($flag4) { ?>
+<p>This page requires input. You either tried to access this page directly, or left one or more input fields blank.</p>
+<?php } else if ($flag3) { ?>
+<p>The input for Class ID must be a number.</p>
+<?php } else if (strcmp($key,"bistriceanu") == 0 || strcmp($key,"Bistriceanu") == 0) {
 
 if (!$flag) { echo("This class ID does not correspond to a currently existing course."); } else {
 

@@ -8,7 +8,8 @@
 <td style="background-color:#aaffaa;width:400px;text-align:top;">
 
 <p>This is the admin control panel for Scuba School.</p>
-<p>Only those with the Admin Key are able to make changes here.</p></br>
+<p>Only those with the Admin Key are able to make changes here.</p>
+<p>All fields are required for all services.</p></br>
 
 <p><b>View Users</b></p>
 <p>If you would like to view a list of all site users, input the Admin Key below.</p>

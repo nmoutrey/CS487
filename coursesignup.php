@@ -8,7 +8,13 @@ mysql_select_db("nmdb");
 
 $id = $_POST['cid'];
 $cash = $_SESSION['money'];
+$flag = false;
 
+if (!ctype_digit($id)) { $flag3 = true; }
+
+if ($id == "") {$flag4 = true; }
+
+if (!$flag3) {
 $result = mysql_query("SELECT * FROM ScubaCourse WHERE classID=\"" . $id . "\"");
 
 $row = mysql_fetch_array($result);
@@ -25,7 +31,7 @@ $flag = mysql_num_rows($result);
 $result = mysql_query("SELECT * FROM ScubaCourse WHERE classID = " . $id);
 
 $flag2 = mysql_num_rows($result);
-
+}
 ?>
 
 <html>
@@ -53,6 +59,10 @@ if(isset($_SESSION['username'])) {
 if($coursecost > cash) { ?>
 <p>You do not have enough money to afford this course.</p>
 <p>You can add more money at the User Control Panel.</p>
+<?php } else if ($flag4) { ?>
+<p>This page requires input. Either you accessed this page directly, or you did not place anything in the input field. Please return to <a href="schedule.php?<?php echo SID ?>">the scheduling page</a> to access normally.</p>
+<?php } else if ($flag3) { ?>
+<p>You must input a non-negative number.</p>
 <?php } else if ($flag) { ?>
 <p>You are already registered for this course.</p>
 <?php } else if (!$flag2) { ?>

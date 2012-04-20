@@ -32,14 +32,24 @@ $musername = $_SESSION['username'];
 $newfirst = $_POST['firstname'];
 $newlast = $_POST['lastname'];
 
-$success = mysql_query("UPDATE ScubaUser SET firstname =\"" . $_POST['firstname'] . "\", lastname=\"" . $_POST['lastname'] . "\" WHERE username=\"" . $musername . "\"") or die(mysql_error());
+$flag1 = false;
+$flag2 = false;
+$flag3 = false;
 
-if (!$success)
-{
-echo("I AM ERROR");
-}
-else
-{
+if (!ctype_alnum($newfirst) || !ctype_alnum($newlast)) { $flag1 = true; }
+if (strlen($newfirst) > 20 || strlen($newlast) > 20) { $flag2 = true; }
+if ($newfirst == "" || $newlast == "") {$flag3 = true; }
+
+if ($flag3) { ?>
+<p>This page requires input. Either you left one or more input fields blank, or you navigated to this page directly. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.
+<?php } else if ($flag1) { ?>
+<p>Only alphanumeric characters are allowed. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.
+<?php } else if ($flag2) { ?>
+<p>Input is capped at a length of 20 characters. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.
+<?php } else {
+
+mysql_query("UPDATE ScubaUser SET firstname =\"" . $_POST['firstname'] . "\", lastname=\"" . $_POST['lastname'] . "\" WHERE username=\"" . $musername . "\"") or die(mysql_error());
+
 $_SESSION['firstname'] = $_POST['firstname'];
 $_SESSION['lastname'] = $_POST['lastname'];
 
@@ -48,8 +58,7 @@ $derp = mysql_query("SELECT * FROM ScubaUser WHERE username=\"" . $musername . "
 $row = mysql_fetch_array($derp);
 ?>
 <p>Your name has been changed to <?php echo($row["firstname"] . " " . $row["lastname"]); ?>. You may now return to your <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a></p>
-<?php } ?>
-<?php } else { ?>
+<?php } } else { ?>
 
 <p>You must be <a href="login.php">Logged In</a> to use this feature.</p>
 

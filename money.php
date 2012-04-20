@@ -1,7 +1,7 @@
 <?php session_start(); ?>
 
 <html>
-<title>We Love Your Money</title>
+<title>Money Transaction</title>
 <body style="background-color:5e7edd;">
 
 <table width="100%" height="100%" border=1px>
@@ -21,32 +21,45 @@
 <?php echo("<p style=\"text-align:right;\">You are logged in, " . $_SESSION['username'] . ". "); ?>
 <a href="logout.php?<?php echo SID ?>">Log Out</a>.</p></br>
 
-<?php
+<?php 
 
 $connection = mysql_connect("omega.cs.iit.edu", "nmoutrey", "nmou123"); 
 
 mysql_select_db("nmdb");
 
+$input = $_POST['cash'];
+
+$flag1 = false;
+$flag2 = false;
+
+if (!ctype_digit($input)) { $flag1 = true; }
+if (ctype_digit($input) && $input <= 0) { $flag2 = true; }
+
+if ($flag1) { ?>
+<p>You must input a number for this service. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.</p>
+<?php } else if ($flag2) { ?>
+<p>The input must be positive for this service. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.</p>
+<?php } else {
 $musername = $_SESSION['username'];
 
 $result = mysql_query("SELECT * FROM ScubaUser WHERE username=\"" . $musername . "\";") or die(mysql_error());
 
 $row = mysql_fetch_array($result);
 
-$moneyin = $row["money"] + $_POST['cash'];
+$moneyin = $row["money"] + $input;
 
 $success = mysql_query("UPDATE ScubaUser SET Money =\"" . $moneyin . "\" WHERE username=\"" . $musername . "\"") or die(mysql_error());
 
 if (!$success)
 {
-echo("I AM ERROR");
+echo("SQL ERROR");
 }
 else
 {
 $_SESSION['money'] = $moneyin;
 ?>
-<p>The money has been added to your account. You may now return to your <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a> to give us more money.</p>
-<?php } ?>
+<p>The money has been added to your account. You may now return to your <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.</p>
+<?php } }?>
 <?php } else { ?>
 
 <p>You must be <a href="login.php">Logged In</a> to use this feature.</p>
