@@ -1,4 +1,27 @@
-<?php session_start(); ?>
+<?php session_start(); 
+
+/* 
+
+This file is a part of Scuba School CS 487 Project Website.
+
+Scuba School CS 487 Project Website is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
+
+Foobar is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Scuba School CS 487 Project Website.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+
+
+?>
 
 <html>
 <title>Scuba School User Control Panel</title>
@@ -102,6 +125,16 @@ First Name: <INPUT TYPE=TEXT NAME="firstname"></br>
 Last Name: <INPUT TYPE=TEXT NAME="lastname"></br>
 <INPUT TYPE=SUBMIT VALUE="Enter">
 </FORM></br>
+
+<p><b>Change Password</b></p>
+<p>In order to change your password, enter your current and new passwords into the fields below.</p>
+<p>This will be effective starting at your next login.</p>
+<FORM ACTION="changepassword.php" METHOD=POST>
+Current Password: <INPUT TYPE=TEXT NAME="currentpassword"></br>
+New Password: <INPUT TYPE=TEXT NAME="newpassword"></br>
+<INPUT TYPE=SUBMIT VALUE="Enter">
+</FORM></br>
+
 <p><b>Add Money</b></p>
 <?php echo("You currently have $" . $_SESSION['money'] . " in your account.");?>
 <p>To add more money to your account, enter the amount below.</p>
@@ -109,6 +142,7 @@ Last Name: <INPUT TYPE=TEXT NAME="lastname"></br>
 $<INPUT TYPE=TEXT NAME="cash"></br>
 <INPUT TYPE=SUBMIT VALUE="Enter">
 </FORM></br>
+
 
 <?php } else { ?>
 <p>You are not logged in. To access the user control panel, please <a href="login.php">Log In</a> to your user account.</br>

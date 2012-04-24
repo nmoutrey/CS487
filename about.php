@@ -1,5 +1,25 @@
 <?php session_start(); ?>
 
+<?php /* 
+
+This file is a part of Scuba School CS 487 Project Website.
+
+Scuba School CS 487 Project Website is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
+
+Foobar is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Scuba School CS 487 Project Website.  If not, see <http://www.gnu.org/licenses/>.
+
+*/ ?>
+
+
 <html>
 <title>About Scuba School</title>
 <body style="background-color:5e7edd;">
@@ -24,8 +44,8 @@
 <?php } else
 echo("<p align=\"right\">Welcome, Guest. Please <a href=\"register.php\">Create an Account</a>.</p></br>");
 ?>
-<p>Scuba School has been providing quality scuba diving instruction and aid since three days ago.</p>
-<p>It is our mission to ensure that no one who is interested in scuba diving is denied the opportunity to give us money.</p>
+<p>Scuba School provides quality instruction and aid to those who wish to learn scuba diving.</p>
+<p>If you have an account, you may register for our classes online.</p>
 <p>For more information on our business, call or mail us using the below information.</p></br>
 <p>999 Fake Street</p>
 <p>Winnetka, Illinois, 60692</p>

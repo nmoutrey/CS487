@@ -23,6 +23,26 @@ if($flag == 1)
 session_start();
 }
 }
+
+/* 
+
+This file is a part of Scuba School CS 487 Project Website.
+
+Scuba School CS 487 Project Website is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
+
+Foobar is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Scuba School CS 487 Project Website.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 ?>
 
 <html>
@@ -37,7 +57,7 @@ session_start();
 <table width="100%" height="100%" border=1px>
 <tr> <td style="background-color:#80a0ff;" height=20px>
 
-<?php if($flag == 1 || isset($_POST['username'])) { ?>
+<?php if($flag == 1 || isset($_SESSION['username'])) { ?>
 <p style="text-align:center;"><a href="userpanel.php?<?php echo SID ?>">Manage Account</a> - <a href="list.php?<?php echo SID ?>">View Available Classes</a> - <a href="schedule.php?<?php echo SID ?>">Sign Up for a Class</a> - <a href="about.php?<?php echo SID ?>">About Us</a></p>
 <?php } else { ?>
 <p style="text-align:center;"><a href="login.php">Login Page</a> - <a href="list.php">View Available Classes</a> - <a href="about.php">About Us</a></p>

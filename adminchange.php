@@ -23,6 +23,7 @@ $connection = @mysql_connect("omega.cs.iit.edu", "nmoutrey", "nmou123");
 
 mysql_select_db("nmdb");
 
+$id = $_POST['id'];
 $name = $_POST['name'];
 $description = $_POST['description'];
 $location = $_POST['location'];
@@ -35,6 +36,7 @@ $capacity = $_POST['capacity'];
 $key = $_POST['key'];
 
 $emptyflag = false;
+$idflag = false;
 $nameflag = false;
 $locationflag = false;
 $descriptionflag = false;
@@ -60,7 +62,8 @@ function really_is_int($val)
     return ($val !== true) && ((string)abs((int) $val)) === ((string) ltrim($val, '-0'));
 }
 
-if ($name == "" || $description == "" || $location == "" || $day == "" || $month == "" || $year == "" || $price == "" || $capacity == "" || $key == "") { $emptyflag = true; }
+if ($id == "" || $name == "" || $description == "" || $location == "" || $day == "" || $month == "" || $year == "" || $price == "" || $capacity == "" || $key == "") { $emptyflag = true; }
+if (!really_is_int($id)) { $idflag = true; }
 if (strlen($name) > 30) { $nameflag = true; }
 if (strlen($location) > 30) { $locationflag = true; }
 if (strlen($description) > 100) { $descriptionflag = true; }
@@ -81,7 +84,7 @@ else if (!really_is_int($price)) { $priceflag3 = true; }
 else if ($price < 1) { $priceflag2 = true; }
 
 $masterflag = false;
-if ($nameflag || $locationflag || $descriptionflag || $monthflag1 || $monthflag2 || $monthflag3 || $dayflag1 || $dayflag2 || $dayflag3 || $yearflag1 || $yearflag2 || $yearflag3 || $capacityflag1 || $capacityflag2 || $capacityflag3 || $priceflag1 || $priceflag2 || $priceflag3) { $masterflag = true; }
+if ($idflag || $nameflag || $locationflag || $descriptionflag || $monthflag1 || $monthflag2 || $monthflag3 || $dayflag1 || $dayflag2 || $dayflag3 || $yearflag1 || $yearflag2 || $yearflag3 || $capacityflag1 || $capacityflag2 || $capacityflag3 || $priceflag1 || $priceflag2 || $priceflag3) { $masterflag = true; }
 
 ?>
 
@@ -98,51 +101,70 @@ if ($nameflag || $locationflag || $descriptionflag || $monthflag1 || $monthflag2
 <p>This page requires input. Either you navigated to this page directly, or you left one or more input fields blank.</p>
 <?php } else if ($masterflag) { ?>
 <p>One or more inputs were invalid:</p></br>
-<?php if ($nameflag) { ?>
+<?php if ($idflag) { ?>
+<p>The class ID must be a positive integer.</p>
+<?php } if ($nameflag) { ?>
 <p>The name field has a maximum of 30 characters.</p>
 <?php } if ($locationflag) { ?>
 <p>The location field has a maximum of 30 characters.</p>
 <?php } if ($descriptionflag) { ?>
 <p>The description field has a maximum of 100 characters.</p>
 <?php } if ($monthflag1) { ?>
-<p>The month input must be a number.</p>
+<p>The month input must be a positive integer.</p>
 <?php } else if ($monthflag3) { ?>
-<p>The month input must be a positive number.</p>
+<p>The month input must be a positive integer.</p>
 <?php } else if ($monthflag2) { ?>
 <p>The month input must be a value between 1 and 12.</p>
 <?php } if ($dayflag1) { ?>
-<p>The day input must be a number.</p>
+<p>The day input must be a positive integer.</p>
 <?php } else if ($dayflag3) { ?>
-<p>The day input must be a positive number.</p>
+<p>The day input must be a positive integer.</p>
 <?php } else if ($dayflag2) { ?>
 <p>The day input must be a value between 1 and 31.</p>
 <?php } if ($yearflag1) { ?>
-<p>The year input must be a number.</p>
+<p>The year input must be a positive integer.</p>
 <?php } else if ($yearflag3) { ?>
-<p>The year input must be a positive number.</p>
+<p>The year input must be a positive integer.</p>
 <?php } else if ($yearflag2) { ?>
 <p>The year input must be a value between 2000 and 2100.</p>
 <?php } if ($capacityflag1) { ?>
-<p>The capacity field must be a number.</p>
+<p>The capacity field must be a positive integer.</p>
 <?php } else if ($capacityflag3) { ?>
-<p>The capacity field must be a positive number.</p>
+<p>The capacity field must be a positive integer.</p>
 <?php } else if ($capacityflag2) { ?>
-<p>The capacity field must be a positive number.</p>
+<p>The capacity field must be a positive integer.</p>
 <?php } if ($priceflag1) { ?>
-<p>The price field must be a number.</p>
+<p>The price field must be a positive integer.</p>
 <?php } else if ($priceflag3) { ?>
-<p>The price field must be a positive number.</p>
+<p>The price field must be a positive integer.</p>
 <?php } else if ($priceflag2) { ?>
-<p>The price field must be a positive number.</p>
+<p>The price field must be a positive integer.</p>
 <?php } } else if (strcmp($key,"bistriceanu") == 0 || strcmp($key,"Bistriceanu") == 0) {
 
-$success = mysql_query("Insert into ScubaCourse (name, location, description, day, month, year, capacity, price) values ('" . $name . "','" . $location . "','" . $description . "'," . $day . "," . $month . "," . $year . "," . $capacity . "," . $price . ")");
+$result = mysql_query("Select * from ScubaCourse where classID = " . $id);
+
+$flag = mysql_num_rows($result);
+
+$result = mysql_query("SELECT COUNT(*) AS num FROM TakesCourse NATURAL JOIN ScubaCourse WHERE classID =" . $id);
+
+$row = mysql_fetch_array($result);
+
+$cap = $row['num'];
+
+if (!$flag) { ?>
+<p>This course does not exist.</p>
+<?php } else if ($capacity < $cap) { ?>
+<p>You cannot lower the capacity for this course to the specified value.</p>
+<p>The number of users already registered is greater than the desired value.</p>
+<?php } else {
+
+$success = mysql_query("Update ScubaCourse Set name='" . $name . "', location='" . $location . "', description='" . $description . "', day=" . $day . ", month =" . $month . ", year=" . $year . ", capacity=" . $capacity . ", price=" . $price . " where classID =" . $id);
 
 if ($success) {
-echo("<p>Class added.</p>");
+echo("<p>Class changed.</p>");
 } else { echo("<p>SQL Error.</p>"); }
 
-} else { echo("Invalid Admin Key"); } ?>
+} } else { echo("Invalid Admin Key"); } ?>
 
 </td>
 </tr>

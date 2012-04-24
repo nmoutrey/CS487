@@ -20,10 +20,11 @@ along with Scuba School CS 487 Project Website.  If not, see <http://www.gnu.org
 */
 
 
+
 ?>
 
 <html>
-<title>Money Transaction</title>
+<title>Change Password</title>
 <body style="background-color:5e7edd;">
 
 <table width="100%" height="100%" border=1px>
@@ -43,46 +44,47 @@ along with Scuba School CS 487 Project Website.  If not, see <http://www.gnu.org
 <?php echo("<p style=\"text-align:right;\">You are logged in, " . $_SESSION['username'] . ". "); ?>
 <a href="logout.php?<?php echo SID ?>">Log Out</a>.</p></br>
 
-<?php 
+<?php
 
 $connection = mysql_connect("omega.cs.iit.edu", "nmoutrey", "nmou123"); 
 
 mysql_select_db("nmdb");
 
-$input = $_POST['cash'];
+$mpassword = $_SESSION['password'];
+$ppassword = $_POST['currentpassword'];
+$npassword = $_POST['newpassword'];
 
 $flag1 = false;
 $flag2 = false;
+$flag3 = false;
+$flag4 = false;
+$flag5 = false;
 
-if (!ctype_digit($input)) { $flag1 = true; }
-if (ctype_digit($input) && $input <= 0) { $flag2 = true; }
+if (!ctype_alnum($ppassword) || !ctype_alnum($npassword)) { $flag1 = true; }
+if (strlen($ppassword) > 20 || strlen($npassword) > 20) { $flag2 = true; }
+if (strlen($ppassword) < 4 || strlen($npassword) < 4) { $flag4 = true; }
+if ($ppassword == "" || $npassword == "") {$flag3 = true; }
+if (strcmp($mpassword,$ppassword) != 0) { $flag5 = true; }
 
-if ($flag1) { ?>
-<p>You must input a number for this service. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.</p>
+if ($flag3) { ?>
+<p>This page requires input. Either you left one or more input fields blank, or you navigated to this page directly. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.
+<?php } else if ($flag1) { ?>
+<p>Only alphanumeric characters are allowed. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.
 <?php } else if ($flag2) { ?>
-<p>The input must be positive for this service. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.</p>
+<p>Input is capped at a length of 20 characters. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.
+<?php } else if ($flag4) { ?>
+<p>Input must be at least 4 characters. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.
+<?php } else if ($flag5) { ?>
+<p>The current password you put in does not match your true password. Please return to the <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.
 <?php } else {
-$musername = $_SESSION['username'];
 
-$result = mysql_query("SELECT * FROM ScubaUser WHERE username=\"" . $musername . "\";") or die(mysql_error());
+mysql_query("UPDATE ScubaUser SET password =\"" . $npassword . "\" WHERE username=\"" . $_SESSION['username'] . "\"") or die(mysql_error());
 
-$row = mysql_fetch_array($result);
+$_SESSION['password'] = $npassword;
 
-$moneyin = $row["money"] + $input;
-
-$success = mysql_query("UPDATE ScubaUser SET Money =\"" . $moneyin . "\" WHERE username=\"" . $musername . "\"") or die(mysql_error());
-
-if (!$success)
-{
-echo("SQL ERROR");
-}
-else
-{
-$_SESSION['money'] = $moneyin;
 ?>
-<p>The money has been added to your account. You may now return to your <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a>.</p>
-<?php } }?>
-<?php } else { ?>
+<p>Your password has been changed. You may now return to your <a href="userpanel.php?<?php echo SID ?>">User Control Panel</a></p>
+<?php } } else { ?>
 
 <p>You must be <a href="login.php">Logged In</a> to use this feature.</p>
 
